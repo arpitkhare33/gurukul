@@ -20,6 +20,18 @@ const User = {
   async findUserById(id) {
     const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
     return result.rows[0];
+  },
+  async updateUser(userId, { name, bio, contactDetails }) {
+    const result = await pool.query(
+      'UPDATE users SET name = $1, bio = $2, contact_details = $3 WHERE id = $4 RETURNING *',
+      [name, bio, contactDetails, userId]
+    );
+    return result.rows[0];
+  },
+
+  async getAllUsers() {
+    const result = await pool.query('SELECT * FROM users ORDER BY created_at DESC');
+    return result.rows;
   }
 };
 
