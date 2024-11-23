@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const courseRoutes = require('./routes/courseRoutes');
 const instructorRoutes = require('./routes/instructorRoutes');
+const batchRoutes = require('./routes/batchRoutes');
 
 dotenv.config();
 const app = express();
@@ -16,6 +17,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/course', courseRoutes);
 app.use('/api/instructors', instructorRoutes);
+app.use('/api/batch', batchRoutes);
 
 
 const PORT = process.env.PORT || 5000;
