@@ -1,7 +1,7 @@
 // controllers/authController.js
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-
+const logActivity = require('../utils/activityLogger')
 const authController = {
   async register(req, res) {
     const { email, phone, password, role } = req.body;
@@ -21,11 +21,19 @@ const authController = {
     }
   },
 
-  login(req, res) {
+  async login(req, res) {
     const user = req.user; // Passport attaches the user object to req
     const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
+    await logActivity({
+      userId: user.id,
+      activityType: 'login',
+      metadata,
+      ipAddress: req.ip,
+      deviceType: req.headers['user-agent'] || 'unknown',
+      successful: true,
+  });
     res.json({ token });
   }
 };

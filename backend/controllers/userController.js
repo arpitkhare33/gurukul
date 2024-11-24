@@ -55,7 +55,36 @@ const userController = {
       console.error("Error fetching users:", error);
       res.status(500).json({ message: 'Server error' });
     }
-  }
+  },
+  async changePassword(req, res){
+    const { userId, newPassword } = req.body;
+    try {
+        const hashedPassword = bcrypt.hashSync(newPassword, 10);
+        await User.update({ password: hashedPassword }, { where: { id: userId } });
+
+        await logActivity({
+            userId,
+            activityType: 'password change',
+            ipAddress: req.ip,
+            deviceType: req.headers['user-agent'] || 'unknown',
+            successful: true,
+        });
+
+        res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+        console.error('Error updating password:', error);
+        await logActivity({
+            userId,
+            activityType: 'password change',
+            ipAddress: req.ip,
+            deviceType: req.headers['user-agent'] || 'unknown',
+            successful: false,
+            errorMessage: error.message,
+        });
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+
 };
 
 module.exports = userController;
