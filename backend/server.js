@@ -8,11 +8,17 @@ const courseRoutes = require('./routes/courseRoutes');
 const instructorRoutes = require('./routes/instructorRoutes');
 const batchRoutes = require('./routes/batchRoutes');
 const videoRoutes = require('./routes/videoRoutes');
-
+const cors = require('cors');
 dotenv.config();
 const app = express();
 app.use(express.json());
 // Initialize Passport
+app.use(cors({
+    origin: 'http://localhost:3000', // Replace with your frontend URL
+    credentials: true,               // Enable cookies for cross-origin requests if needed
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // Allow specific headers
+}));
 app.use(passport.initialize());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
@@ -20,6 +26,7 @@ app.use('/api/course', courseRoutes);
 app.use('/api/instructors', instructorRoutes);
 app.use('/api/batch', batchRoutes);
 app.use('/api/videos', videoRoutes);
+// Configure CORS
 
 
 const PORT = process.env.PORT || 5000;
