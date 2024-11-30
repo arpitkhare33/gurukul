@@ -13,8 +13,10 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       await login(email, password);
+      console.log("Successful login");
       navigate('/dashboard');  // Redirect after login
     } catch (err) {
+        console.log(err);
       setError('Invalid email or password');
     }
   };

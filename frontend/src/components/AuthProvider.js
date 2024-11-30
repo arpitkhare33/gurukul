@@ -9,9 +9,12 @@ const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await api.post('/user/login', { email, password });
+        console.log("Requesting post: ", email, password);
+      const response = await api.post('/auth/login', { email, password });
       localStorage.setItem('token', response.data.token);
+      console.log("Successful login:", response.data.token);
       setUser(response.data.user);  // assuming the response contains user data
+      window.location.href = '/dashboard';
       return response.data.user;
     } catch (error) {
       console.error('Login failed:', error);

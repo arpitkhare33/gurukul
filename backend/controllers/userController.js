@@ -15,6 +15,7 @@ const userController = {
 
   async updateProfile(req, res) {
     const { name, bio, contactDetails } = req.body;
+    console.log("Update request recieved");
     try {
       const updatedUser = await User.updateUser(req.user.id, { name, bio, contactDetails });
       res.status(200).json(updatedUser);

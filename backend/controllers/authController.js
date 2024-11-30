@@ -27,14 +27,15 @@ const authController = {
     const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
-    await logActivity({
-      userId: user.id,
-      activityType: 'login',
-      metadata,
-      ipAddress: req.ip,
-      deviceType: req.headers['user-agent'] || 'unknown',
-      successful: true,
-  });
+    console.log("Login request recvd: ", user);
+  //   await logActivity({
+  //     userId: user.id,
+  //     activityType: 'login',
+  //     metadata,
+  //     ipAddress: req.ip,
+  //     deviceType: req.headers['user-agent'] || 'unknown',
+  //     successful: true,
+  // });
     res.json({ token });
   }
 };
