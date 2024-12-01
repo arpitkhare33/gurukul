@@ -2,58 +2,138 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 const Batch = sequelize.define('Batch', {
-  title: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
   description: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
   },
-  instructorId: {
+  slug: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true,
+  },
+  price: {
     type: DataTypes.INTEGER,
     allowNull: false,
+  },
+  payable: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  },
+  certificateFee: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+    field: 'certificate_fee',
+  },
+  offerId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    field: 'offer_id',
+  },
+  timeLimit: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    field: 'time_limit',
+  },
+  img: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  association: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  logo: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  batchType: {
+    type: DataTypes.INTEGER, // 1 = course, 2 = workshop, 3 = digital goods
+    allowNull: false,
+    field: 'batch_type',
   },
   startDate: {
     type: DataTypes.DATE,
     allowNull: true,
+    field: 'start_date',
   },
-  type: {
-    type: DataTypes.INTEGER, // 1 = course, 2 = workshop, 3 = digital goods
+  endDate: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    field: 'end_date',
+  },
+  schedule: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  about: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  learn: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  benefits: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  group_link: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  group_link1: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  group_link2: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  telegramBroadcast: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'telegram_broadcast',
+  },
+  teacherId: {
+    type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'teacher_id',
+  },
+  teacherPayment: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+    field: 'teacher_payment',
+  },
+  meetingLink: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   status: {
     type: DataTypes.ENUM('live', 'private', 'public', 'open for enrollment'),
     defaultValue: 'private',
   },
-  telegramId: {
-    type: DataTypes.STRING,
+  nextClass: {
+    type: DataTypes.DATE,
     allowNull: true,
+    field: 'next_class',
   },
-  groupLinks: {
-    type: DataTypes.JSON, // Store URLs to group chats, etc.
-    allowNull: true,
-  },
-  additionalResources: {
-    type: DataTypes.JSON, // Store URLs or descriptions for additional resources
-    allowNull: true,
-  },
-  schedule: {
-    type: DataTypes.TEXT, // Store schedule details of upcoming classes
-    allowNull: true,
-  },
-  category: {
-    type: DataTypes.STRING, // e.g., web dev, ML, etc.
+  createdAt: {
+    type: DataTypes.DATE,
     allowNull: false,
+    field: 'created_at',
   },
-  certificateFee: {
-    type: DataTypes.FLOAT,
-    allowNull: true,
-  },
-  price: {
-    type: DataTypes.INTEGER,
-    allowNull: false
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    field: 'updated_at',
   }
+}, {
+  tableName: 'batches',
+  timestamps: true,
 });
 
 module.exports = Batch;

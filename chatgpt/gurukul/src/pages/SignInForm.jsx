@@ -16,65 +16,55 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/components/ui/icons"
-
+// import {BackendConfig} from '@/config/BackendConfig'
+import BackendConfig from '../config/BackendConfig'
+import axios from 'axios'
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }),
-  mobile: z.string().regex(/^\+?[1-9]\d{1,14}$/, {
-    message: "Please enter a valid mobile number.",
-  }),
 })
 
-export default function RegisterForm() {
+export function SignInForm() {
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
-      mobile: "",
     },
   })
 
-  function onSubmit(values) {
+  async function onSubmit(values) {
+    try{
     setIsLoading(true)
     // Simulate API call
+    const target_url = BackendConfig.apiBaseUrl+"/auth/login";
+    const response = await axios.post(target_url, values);
+    console.log(response);
     setTimeout(() => {
       console.log(values)
       setIsLoading(false)
     }, 2000)
   }
+  catch(e){
+    console.log(e);
+  }
+  
+  }
 
   return (
     <div className="mx-auto max-w-md space-y-6 mt-10">
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Create an account</h1>
-        <p className="text-gray-500 dark:text-gray-400">Enter your information to get started</p>
+        <h1 className="text-3xl font-bold">Sign In</h1>
+        <p className="text-gray-500 dark:text-gray-400">Enter your credentials to access your account</p>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="John Doe" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="email"
@@ -101,24 +91,11 @@ export default function RegisterForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="mobile"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Mobile Number</FormLabel>
-                <FormControl>
-                  <Input type="tel" placeholder="+99999999999" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Register
+            Sign In
           </Button>
         </form>
       </Form>

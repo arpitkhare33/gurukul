@@ -1,38 +1,132 @@
-// models/User.js
-const pool = require('../config/db');
-const bcrypt = require('bcryptjs');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const User = {
-  async createUser({ email, phone, password, role }) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await pool.query(
-      'INSERT INTO users (email, phone, password, role) VALUES ($1, $2, $3, $4) RETURNING *',
-      [email, phone, hashedPassword, role]
-    );
-    return result.rows[0];
+const User = sequelize.define('User', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
   },
-
-  async findUserByEmail(email) {
-    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    return result.rows[0];
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-
-  async findUserById(id) {
-    const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
-    return result.rows[0];
+  googleId: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'google_id',
   },
-  async updateUser(userId, { name, bio, contactDetails }) {
-    const result = await pool.query(
-      'UPDATE users SET name = $1, bio = $2, contact_details = $3 WHERE id = $4 RETURNING *',
-      [name, bio, contactDetails, userId]
-    );
-    return result.rows[0];
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
   },
-
-  async getAllUsers() {
-    const result = await pool.query('SELECT * FROM users ORDER BY created_at DESC');
-    return result.rows;
+  isVerified: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    field: 'is_verified',
+  },
+  emailVerifiedAt: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    field: 'email_verified_at',
+  },
+  userName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'user_name',
+  },
+  mobile: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  college: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  course: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  gender: {
+    type: DataTypes.ENUM('male', 'female', 'other'),
+    allowNull: true,
+  },
+  role: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  avatar: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  status: {
+    type: DataTypes.INTEGER,
+    defaultValue: 1,
+  },
+  coupon: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'coupan',
+  },
+  lastActivity: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    field: 'lastactivity',
+  },
+  bio: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  telegramId: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'telegramid',
+  },
+  field1: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  field2: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  field3: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  field4: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  field5: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  rememberToken: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'remember_token',
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    field: 'created_at',
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    field: 'updated_at',
   }
-};
+}, {
+  tableName: 'users',
+  timestamps: true,
+},
+);
+
 
 module.exports = User;

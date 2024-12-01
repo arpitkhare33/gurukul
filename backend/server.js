@@ -14,13 +14,16 @@ const app = express();
 app.use(express.json());
 // Initialize Passport
 app.use(cors({
-    origin: 'http://localhost:3000', // Replace with your frontend URL
+    origin: 'http://localhost:5175', // Replace with your frontend URL
     credentials: true,               // Enable cookies for cross-origin requests if needed
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'] // Allow specific headers
 }));
 app.use(passport.initialize());
 app.use('/api/auth', authRoutes);
+/* `app.use('/api/user', userRoutes);` is mounting the `userRoutes` middleware at the `/api/user`
+endpoint in the Express application. This means that any requests that start with `/api/user` will
+be handled by the routes defined in the `userRoutes` module. */
 app.use('/api/user', userRoutes);
 app.use('/api/course', courseRoutes);
 app.use('/api/instructors', instructorRoutes);
@@ -29,5 +32,5 @@ app.use('/api/videos', videoRoutes);
 // Configure CORS
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

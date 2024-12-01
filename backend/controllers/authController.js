@@ -1,15 +1,17 @@
 // controllers/authController.js
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const logActivity = require('../utils/activityLogger')
+const logActivity = require('../utils/activityLogger');
+const userController = require('./userController');
 const authController = {
   async register(req, res) {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, mobile } = req.body;
     try {
-      const existingUser = await User.findUserByEmail(email);
+      const existingUser = await userController.findUserByEmail(email);
       if (existingUser) return res.status(400).json({ message: 'User already exists' });
-      const role = "student";
-      const newUser = await User.createUser({ email, phone, password, role });
+      // const role = "student";
+      console.log("User does not exist");
+      const newUser = await userController.createUser(req, res);
       const token = jwt.sign({ userId: newUser.id, role: newUser.role }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN,
       });
