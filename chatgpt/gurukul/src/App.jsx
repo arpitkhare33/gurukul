@@ -7,6 +7,8 @@ import { CourseCard } from './components/custom/CourseCard'
 import CoursePage from './pages/CoursePage'
 import { CourseCreator } from './pages/CourseCreator'
 import { SessionManager } from './pages/SessionManager'
+import { UserProfileUpdate } from './pages/UserProfileUpdate'
+import ChangePassword from './pages/ChangePassword'
 function App() {
 
 
@@ -15,6 +17,7 @@ function App() {
 
       <Navbar />
       {/* <SessionManager/> */}
+      {/* <UserProfileUpdate/> */}
     <Routes>
       {/* <Route path='/' element={</>}   /> */}
       <Route path='/register' element={<RegisterForm/>}   />
@@ -22,6 +25,9 @@ function App() {
       <Route path='/courses' element={<CoursePage/>}/>
       <Route path='/course_creator' element={<CourseCreator/>}/>
       <Route path='/manage_sessions' element={<SessionManager/>}/>
+      <Route path='/profile_update' element={<UserProfileUpdate/>}/>
+      <Route path='/settings' element={<UserProfileUpdate/>}/>
+      <Route path='/change_password' element={<ChangePassword/>}/>
       
     </Routes>
     </>

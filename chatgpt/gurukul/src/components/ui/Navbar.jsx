@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Settings, LogOut } from 'lucide-react'
+import { Settings, LogOut, KeyRound } from 'lucide-react'
 import { 
   DropdownMenu, 
   DropdownMenuContent,
@@ -42,6 +42,12 @@ export default function Navbar() {
             <a href="/settings" className="flex items-center">
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
+            </a>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <a href="/change_password" className="flex items-center text-yellow-400">
+              <KeyRound className="mr-2 h-4 w-4" />
+              <span>Change Password</span>
             </a>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>

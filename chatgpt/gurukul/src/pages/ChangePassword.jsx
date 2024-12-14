@@ -5,6 +5,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Button } from "@/components/ui/button"
+import axios from 'axios';
+import GoogleButton from 'react-google-button'
+// require('dotenv').config(); // Load .env variables
+
 import {
   Form,
   FormControl,
@@ -16,9 +20,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/components/ui/icons"
-// import {BackendConfig} from '@/config/BackendConfig'
+// import BackendConfig from "@/config/BackendConfig"
 import BackendConfig from '../config/BackendConfig'
-import axios from 'axios'
+
 const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
@@ -28,7 +32,7 @@ const formSchema = z.object({
   }),
 })
 
-export function SignInForm() {
+export default function ChangePassword() {
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm({
@@ -38,35 +42,35 @@ export function SignInForm() {
       password: "",
     },
   })
-  const handleGoogleSignIn = async() => {
-    window.location.href = `http://localhost:5001/api/auth/google`;
+
+  const onSubmit = async (values) => {
+    // e.preventDefault();
+    try {
+        const target_url = BackendConfig.apiBaseUrl + '/user/profile/change_password';
+        const authToken = localStorage.getItem("authToken");
+        const headers = {
+            Authorization: `Bearer ${authToken}`, // Add token to the Authorization header
+            'Content-Type': 'application/json',
+        };
+        const response = await axios.post(target_url, values, {headers});
+        alert("Password Updated.");
+    } catch (error) {
+      console.error('Error registering user:', error);
+      alert(error.response?.data?.message || 'Error registering user');
+    }
   };
-  async function onSubmit(values) {
-    try{
-    setIsLoading(true)
-    // Simulate API call
-    const target_url = BackendConfig.apiBaseUrl+"/auth/login";
-    const response = await axios.post(target_url, values);
-    localStorage.setItem("authToken", response.data.token);
+  const handleGoogleSignIn = async() => {
+    // Redirect the user to your Google Sign-In route
+    const response = await axios.get("http://localhost:5001/api/auth/google");
     console.log(response);
-    console.log(localStorage);
-    setTimeout(() => {
-      console.log(values)
-      setIsLoading(false)
-    }, 2000)
-  }
-  catch(e){
-    console.log(e);
-    setIsLoading(false);
-  }
-  
-  }
+    // window.location.assign = `$`;
+  };
 
   return (
     <div className="mx-auto max-w-md space-y-6 mt-10">
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Sign In</h1>
-        <p className="text-gray-500 dark:text-gray-400">Enter your credentials to access your account</p>
+        <h1 className="text-3xl font-bold">Change your account password</h1>
+        <p className="text-gray-500 dark:text-gray-400">Use a Secure Password</p>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -96,28 +100,15 @@ export function SignInForm() {
               </FormItem>
             )}
           />
+          
           <Button type="submit" className="w-full outline" disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In
+            Change Password
           </Button>
         </form>
       </Form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div>
-      <Button variant="outline" type="button" className="w-full" onClick={handleGoogleSignIn}>
-        <Icons.google className="mr-2 h-4 w-4" />
-        Sign in with Google
-      </Button>
     </div>
   )
 }

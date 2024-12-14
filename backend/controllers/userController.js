@@ -43,28 +43,30 @@ const userController = {
     }
   },
   // Get a single user by ID
-  async getUserById(req, res) {
-    
+  async getUserById(id) {
+    // console.log("Request inside get user by id:", id);
     try {
-      const { id } = req.params;
+      // const { id } = req.params;
       const user = await User.findByPk(id);
 
       if (!user) {
-        return res.status(404).json({ success: false, message: 'User not found' });
+        return null;
       }
 
-      res.status(200).json({ success: true, data: user });
+      return user;
     } catch (error) {
       console.error('Error fetching user:', error);
-      res.status(500).json({ success: false, message: 'Error fetching user', error: error.message });
+      return null;
     }
   },
     // Update user by ID
   async updateUser(req, res) {
       try {
-        const { id } = req.params;
+        // console.log(req);
+        const { id } = req.user;
         const { password, ...otherFields } = req.body;
-  
+        console.log("id:", id);
+        console.log("Update User Request Received: ", req.body);
         // Find user
         const user = await User.findByPk(id);
         if (!user) {
@@ -75,6 +77,7 @@ const userController = {
         if (password) {
           otherFields.password = await bcrypt.hash(password, 10);
         }
+        console.log(req);
   
         // Update user
         await user.update(otherFields);
@@ -85,6 +88,16 @@ const userController = {
         res.status(500).json({ success: false, message: 'Error updating user', error: error.message });
       }
     },
+  // async changePassword(req, res){
+  //   try{
+  //     console.log("Change password request received.");
+  //     const userData= req.body;
+  //     console.log("User Details: ", userData);
+  //   }
+  //   catch(err){
+  //   console.log("Password Can't be changed: ", err.message);
+  // }
+  // },
     // Delete user by ID
   async deleteUser(req, res) {
     try {
@@ -116,17 +129,18 @@ const userController = {
     }
   },
 
-  async updateProfile(req, res) {
-    const { name, bio, contactDetails } = req.body;
-    console.log("Update request recieved")
-    try {
-      const updatedUser = await User.updateUser(req.user.id, { name, bio, contactDetails });
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      res.status(500).json({ message: 'Server error' });
-    }
-  },
+  // async updateProfile(req, res) {
+  //   const { name, bio, contactDetails } = req.body;
+  //   console.log("Update request recieved")
+  //   try {
+  //     console.log("User: ", req.user);
+  //     const updatedUser = await userController.updateUser(req.user.id, { name, bio, contactDetails });
+  //     res.status(200).json(updatedUser);
+  //   } catch (error) {
+  //     console.error("Error updating profile:", error);
+  //     res.status(500).json({ message: 'Server error' });
+  //   }
+  // },
 
   async getUserDashboard(req, res) {
     try {
@@ -161,30 +175,30 @@ const userController = {
     }
   },
   async changePassword(req, res){
-    const { userId, newPassword } = req.body;
+    const { email, password } = req.body;
     try {
-        const hashedPassword = bcrypt.hashSync(newPassword, 10);
-        await User.update({ password: hashedPassword }, { where: { id: userId } });
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        await User.update({ password: hashedPassword }, { where: { email: email } });
 
-        await logActivity({
-            userId,
-            activityType: 'password change',
-            ipAddress: req.ip,
-            deviceType: req.headers['user-agent'] || 'unknown',
-            successful: true,
-        });
+        // await logActivity({
+        //     userId,
+        //     activityType: 'password change',
+        //     ipAddress: req.ip,
+        //     deviceType: req.headers['user-agent'] || 'unknown',
+        //     successful: true,
+        // });
 
         res.json({ message: 'Password updated successfully' });
     } catch (error) {
         console.error('Error updating password:', error);
-        await logActivity({
-            userId,
-            activityType: 'password change',
-            ipAddress: req.ip,
-            deviceType: req.headers['user-agent'] || 'unknown',
-            successful: false,
-            errorMessage: error.message,
-        });
+        // await logActivity({
+        //     userId,
+        //     activityType: 'password change',
+        //     ipAddress: req.ip,
+        //     deviceType: req.headers['user-agent'] || 'unknown',
+        //     successful: false,
+        //     errorMessage: error.message,
+        // });
         res.status(500).json({ message: 'Server error' });
     }
 }

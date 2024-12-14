@@ -6,6 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Button } from "@/components/ui/button"
 import axios from 'axios';
+import GoogleButton from 'react-google-button'
+import GoogleLogin from 'react-google-login'
 // require('dotenv').config(); // Load .env variables
 
 import {
@@ -22,6 +24,8 @@ import { Icons } from "@/components/ui/icons"
 // import BackendConfig from "@/config/BackendConfig"
 import BackendConfig from '../config/BackendConfig'
 
+const GOOGLE_CLIENT_ID="102180616736-l3e4stcqalja10oa78arnc3gdm9s2q49.apps.googleusercontent.com"
+const GOOGLE_CLIENT_SECRET="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"
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
@@ -64,6 +68,9 @@ export default function RegisterForm() {
       console.error('Error registering user:', error);
       alert(error.response?.data?.message || 'Error registering user');
     }
+  };
+  const handleGoogleSignIn = async() => {
+    window.location.href = `http://localhost:5001/api/auth/google`;
   };
 
   return (
@@ -144,7 +151,7 @@ export default function RegisterForm() {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" className="w-full">
+      <Button variant="outline" type="button" className="w-full" onClick={handleGoogleSignIn}>
         <Icons.google className="mr-2 h-4 w-4" />
         Sign in with Google
       </Button>

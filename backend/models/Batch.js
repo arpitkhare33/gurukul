@@ -50,17 +50,17 @@ const Batch = sequelize.define('Batch', {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  batchType: {
+  batch_type: {
     type: DataTypes.INTEGER, // 1 = course, 2 = workshop, 3 = digital goods
     allowNull: false,
     field: 'batch_type',
   },
-  startDate: {
+  start_date: {
     type: DataTypes.DATE,
     allowNull: true,
     field: 'start_date',
   },
-  endDate: {
+  end_date: {
     type: DataTypes.DATE,
     allowNull: true,
     field: 'end_date',
@@ -93,22 +93,50 @@ const Batch = sequelize.define('Batch', {
     type: DataTypes.TEXT,
     allowNull: true
   },
-  telegramBroadcast: {
+  telegram_broadcast: {
     type: DataTypes.STRING,
     allowNull: true,
     field: 'telegram_broadcast',
   },
-  teacherId: {
+  teacher_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     field: 'teacher_id',
   },
-  teacherPayment: {
+  teacher_payment: {
     type: DataTypes.FLOAT,
     allowNull: true,
     field: 'teacher_payment',
   },
-  meetingLink: {
+  meeting_link: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  topic: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  description_short: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  field1: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  field2: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  field3: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  field4: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  field5: {
     type: DataTypes.STRING,
     allowNull: true,
   },
@@ -116,7 +144,7 @@ const Batch = sequelize.define('Batch', {
     type: DataTypes.ENUM('live', 'private', 'public', 'open for enrollment'),
     defaultValue: 'private',
   },
-  nextClass: {
+  next_class: {
     type: DataTypes.DATE,
     allowNull: true,
     field: 'next_class',
