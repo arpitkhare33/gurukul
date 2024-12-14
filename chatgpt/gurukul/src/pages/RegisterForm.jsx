@@ -24,8 +24,6 @@ import { Icons } from "@/components/ui/icons"
 // import BackendConfig from "@/config/BackendConfig"
 import BackendConfig from '../config/BackendConfig'
 
-const GOOGLE_CLIENT_ID="102180616736-l3e4stcqalja10oa78arnc3gdm9s2q49.apps.googleusercontent.com"
-const GOOGLE_CLIENT_SECRET="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"
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
